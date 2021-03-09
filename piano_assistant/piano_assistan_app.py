@@ -75,6 +75,9 @@ while True:
     note2 = input("Enter a second test note. ")
     if note2 == 'QUIT':
         break
+    elif note2 == 'DISPLAY':
+        display_notes()
+        continue
     
 
     add_notes(note2)
