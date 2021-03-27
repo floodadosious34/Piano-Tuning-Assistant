@@ -1,52 +1,16 @@
 import sys
 import time
 import re
-from scipy.io.wavfile import write
-import numpy as np
+import requests
 
-samplerate = 44100
-
-def get_piano_notes():
-    '''
-    Returns a dict object for all the piano 
-    note's frequencies
-    '''
-    # White keys are in Uppercase and black keys (sharps) are in lowercase
-    octave = ['C', 'c', 'D', 'd', 'E', 'F', 'f', 'G', 'g', 'A', 'a', 'B'] 
-    base_freq = 261.63 #Frequency of Note C4
-    
-    note_freqs = {octave[i]: base_freq * pow(2,(i/12)) for i in range(len(octave))}        
-    note_freqs[''] = 0.0
-    
-    return note_freqs
+#API endpoint for free Kanye west quote generator
+kanye_url='https://api.kanye.rest/'
+kanye_text='https://api.kanye.rest?format=text/'
 
 
-def get_wave(freq, duration=0.5):
-    amplitude = 4096
-    t = np.linspace(0, duration, int(samplerate * duration))
-    wave = amplitude * np.sin(2 * np.pi * freq * t)
-    
-    return wave
+response = requests.get(kanye_url)
 
-def get_song_data(music_notes):
-    note_freqs = get_piano_notes()
-    song = [get_wave(note_freqs[note]) for note in music_notes.split('-')]
-    song = np.concatenate(song)
-    return song.astype(np.int16)
-
-
-def main():
-    music = input("Would you like to hear those notes y/n? ")
-    if music == 'y':
-        music_notes = 'C-C-G-G-A-A-G--F-F-E-E-D-D-C--G-G-F-F-E-E-D--G-G-F-F-E-E-D--C-C-G-G-A-A-G--F-F-E-E-D-D-C'
-        data = get_song_data(music_notes)
-        data = data * (16300/np.max(data))
-        write('selected-notes.wav', samplerate, data.astype(np.int16))
-    else:
-        quit
-
-
-# Tuple for listing out notes in two octaves
+# Tuple for listing out notes in all octaves
 notes_ocatve = [
     ("A0", 1),
     ("As0", 2),
@@ -218,7 +182,7 @@ def add_notes(arg):
 
 # Starts the program
 def get_piano_notes():
-    print("""
+    welcome_note =  """
 
 
 
@@ -229,7 +193,18 @@ def get_piano_notes():
 
 
 
-    """)
+    """
+    print(welcome_note)
+    while True:
+        run = input("Hello, if you would like to start press r. If you would like to quit, type q.")
+        if run == 'r':
+            return run
+            break
+        elif run == 'q':
+            return run
+            break
+        else:
+            pass
 
 
 # Displays selected notes on command
@@ -239,28 +214,31 @@ def display_notes():
         for note in selected_notes:
             print(note)
     elif answer == 'n':
-        quit
+        pass
 
 
 # Finds interval between the two selected notes
 def find_interval(arg, arg2):
     for note in notes_ocatve:
-        if str(arg) == note[0]:
+        if arg == note[0]:
             number1 = note[1]
-        if str(arg2) == note[0]:
+        if arg2 == note[0]:
             number2 = note[1]
             try:
                 if number2 > number1: 
                     total = number2 - number1
                     time.sleep(0.9)
                 print("That is {} half steps".format(total))
+                return total
             except UnboundLocalError: #checks if the notes is in the wrong order and gives a -x result
                 print("That is not a valid entry. Make sure the root note is smaller than the second note")
                 return False
                 
             
     # Looks for interval name based on result from previous loop
-    while total <= 28:
+def find_interval_name(arg, arg2, arg3):
+    total = arg3
+    if total <= 28:
         for interval in interval_name:
             if total == interval[1]:
                 total = interval[0]
@@ -269,9 +247,9 @@ def find_interval(arg, arg2):
                 answer = input("Would you like to know the coincidental partial? (y/n)")
                 if answer == 'y':
                     print("The coincidental partial is {}".format(total1))
-                    return False
+                    pass
                 elif answer == 'n':
-                    return False
+                    pass
     else:
         print("Those notes cannot be tested")
 
@@ -288,45 +266,56 @@ def test_note(arg):
             continue 
     print("{} is not a valid note. Please Try again.  ".format(arg))
     return False
-        
 
-# Call to start program            
-get_piano_notes()
+
+def start():
+    answer = input("Would you like to start again? y/n  ")
+    if answer == 'y':
+        master_function()
+    elif answer == 'n':
+        print("Thank You for using the Piano Tuning Assistant. Here is a parting quote from Mr. Kanye West!")
+        print(response.json()['quote'])
+        quit
+
+          
 # Master loop for the program
-while True:
-    run = input("Hello, if you would like to start press r. If you would like to quit, type q.")
-    if run == 'q':
-        break
-    while run == 'r':
-        while True:
-            note1 = input("Enter a root test note (e.g. C4, Cs4/Df4; s=sharp, f=flat) ")
-            result = test_note(note1)
-            if result is False:
-                break
-            elif result is True:
-                add_notes(note1)
-            elif note1 == 'display':
-                display_notes()
-                continue
-            while True:
-                note2 = str(input("Enter a second test note. "))
-                if note2 == 'quit':
-                    break
-                elif note2 == 'display':
-                    display_notes()
-                    continue
-                result2 = test_note(note2)
-                if result2 is True:
-                    add_notes(note2)
-                    break
-                elif result is False:
-                    continue
-                
-            intervalStatus = find_interval(note1, note2)
-            if intervalStatus is False:
-                break
+def master_function():
+    result = get_piano_notes()
+    if result == 'r':
+        note1 = get_note_1()
+        note2 = get_note_2()
+        interval_total = find_interval(note1, note2)
+        find_interval_name(note1, note2, interval_total)
         display_notes()
-        break
-            
-            
+        start()
+    elif result == 'q':
+        print("Thank You for using the Piano Tuning Assistant. Here is a parting quote from Mr. Kanye West!")
+        print(response.json()['quote'])
+        quit
 
+
+
+def get_note_1():
+    while True:
+        note1 = input("Enter a root test note (e.g. C4, Cs4/Df4; s=sharp, f=flat) ")
+        result = test_note(note1)
+        if result is False:
+            pass
+        elif result is True:
+            add_notes(note1)
+            return note1
+
+        
+def get_note_2():
+    while True:
+        note2 = input("Enter a second test note. ")
+        result2 = test_note(note2)
+        if result2 is False:
+            pass
+        elif result2 is True:
+            add_notes(note2)
+            return note2
+    
+
+    
+master_function()
