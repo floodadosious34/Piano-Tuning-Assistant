@@ -7,8 +7,7 @@ I am creating a application that will assist a piano technician in the process o
 1. Implement a master loop 
 2. Create a list and populate it with several values, retrieve one value and use it in the program. 
 3. Create and call at least 3 functions, which return a value that is used in the code of the project.
-4. Possibly use numpy and scipy to produce a wav file that plays the selected notes.
-5. Create a class, by the name of _, and then create 2 objects of that class and populate it with data.
+4. Connects to an external API Kanye West quote generator, and reads out the quote upon exiting the program.
 
 
 ## How to run the project
