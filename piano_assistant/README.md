@@ -1,7 +1,8 @@
 # Code Lousiville Python Project
 
 # Piano Tuning Assistant
-I am creating a application that will assist a piano technician in the process of tuning a Piano. The app will take any two notes from the musical scale (A-G), and return the interval between the two notes, as well as the coincident partials that correspond to the interval. I am looking to add some sound wave development to the app, but not sure yet.
+I am creating a application that will assist a piano technician in the process of tuning a Piano. The app will take any two notes from the musical scale (A0-C8), and return the interval between the two notes, as well as the coincident partials that correspond to the interval. I am looking to add some sound wave development to the app, but not sure yet. The first prompt will ask for a root note. Please enter a note in this fomat:C4, Cs4, D4, Ds4, E4, F4, Fs4, G4, Gs4, A4, As4, B4, C5...etc. 
+After you put in the second note the prompt will tell you how many intervals is between the two test notes. Then it will tell you what type of interval is the two notes (i.e. 2nd, 3rd, 4th, 5th, octave...). Then it will ask if you would like to see the coincident partial. A coincident partial will appear as a ratio (3:2, 5:3...). Then the prompt will ask you if you want to see what the notes were that you chose. When you exit the program it will say farewell and give you a random farewell quote from Kanye West.
 
 ## Features Included
 1. Implement a master loop 
@@ -11,6 +12,6 @@ I am creating a application that will assist a piano technician in the process o
 
 
 ## How to run the project
-1. Install requirements
+1. Clone Repo 
 2. Run the program
 # python3 piano_assistan_app.py
