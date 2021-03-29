@@ -273,7 +273,10 @@ def start():
     if answer == 'y':
         master_function()
     elif answer == 'n':
-        print("Thank You for using the Piano Tuning Assistant. Here is a parting quote from Mr. Kanye West!")
+        print("""
+        Thank You for using the Piano Tuning Assistant. Here is a parting quote from Mr. Kanye West!
+        """)
+        time.sleep(1)
         print(response.json()['quote'])
         quit
 
@@ -289,7 +292,10 @@ def master_function():
         display_notes()
         start()
     elif result == 'q':
-        print("Thank You for using the Piano Tuning Assistant. Here is a parting quote from Mr. Kanye West!")
+        print("""
+        Thank You for using the Piano Tuning Assistant. Here is a parting quote from Mr. Kanye West!
+        """)
+        time.sleep(1)
         print(response.json()['quote'])
         quit
 
